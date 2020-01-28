@@ -1,0 +1,91 @@
+<div layout="column" layout-fill>
+  <div align="center" layout="row" layout-align="center center">
+
+    <mat-card class="info-card mat-elevation-z8" flex="80" style="margin-top: 60px;width: 600px;;">
+
+      <mat-card-title>
+        {{ pageTitle }}
+      </mat-card-title>
+
+      <mat-divider></mat-divider>
+
+      <mat-card-content fxLayout="column" fxLayoutAlign="stretch">
+
+        <form fxLayout="column" fxLayoutAlign="start stretch" [formGroup]="resourceForm" autocomplete="off" novalidate
+          (ngSubmit)="submitForm(resourceForm.value)">
+
+          <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between  start">
+            <mat-form-field fxFlex="48">
+              <input matInput type="text" placeholder="Torre:" formControlName="name" id="name">
+              <mat-error *ngIf="hasError('name', 'required')">Torre e obrigatorio</mat-error>
+              <mat-error *ngIf="hasError('name', 'maxlength')">You have more than 10 characters</mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex="48">
+              <input matInput type="text" placeholder="Tipo:" formControlName="type" id="type">
+              <mat-error *ngIf="hasError('type', 'required')">Tipo e obrigatorio</mat-error>
+              <mat-error *ngIf="hasError('type', 'maxlength')">You have more than 8 characters</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between start" formGroupName="coords">
+            <mat-form-field fxFlex="48">
+              <input matInput type="text" placeholder="Latitude:" formControlName="lat" id="lng">
+            </mat-form-field>
+            <mat-form-field fxFlex="48">
+              <input matInput type="text" placeholder="Longitude:" formControlName="lng" id="lat">
+            </mat-form-field>
+          </div>
+
+          <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between  start">
+
+            <mat-form-field fxFlex="30">
+              <input matInput type="text" placeholder="Vão:" formControlName="forward" id="forward">
+              <mat-error *ngIf="hasError('forward', 'required')">Forward is required</mat-error>
+              <mat-error *ngIf="hasError('forward', 'maxlength')">You have less than 1 character</mat-error>
+            </mat-form-field>
+            <mat-form-field fxFlex="30">
+              <input matInput type="text" placeholder="Peso:" formControlName="weight" id="weight">
+              <mat-error *ngIf="hasError('weight', 'required')">Peso e obrigatorio</mat-error>
+              <mat-error *ngIf="hasError('weight', 'minLength')">You have less than 1 character</mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex="30">
+              <input matInput type="text" placeholder="Altura:" formControlName="height" id="height">
+              <mat-error *ngIf="hasError('height', 'required')">Altura e obrigatorio</mat-error>
+              <mat-error *ngIf="hasError('height', 'minLength')">You have less than 1 character</mat-error>
+            </mat-form-field>
+
+          </div>
+
+          <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between  start">
+            <mat-form-field fxFlex="48">
+              <mat-label>Status</mat-label>
+              <select matNativeControl required formControlName="released" id="released">
+                <option value="LIBERADO">Liberado</option>
+                <option value="EMBARGO">Embargo</option>
+                <option value="ARQUEOLOGIA">Arqueologia</option>
+              </select>
+            </mat-form-field>
+
+            <mat-form-field fxFlex="48">
+              <input matInput type="text" placeholder="Localidade:" formControlName="locality" id="locality">
+              <mat-error *ngIf="hasError('locality', 'required')">Locality is required</mat-error>
+              <mat-error *ngIf="hasError('locality', 'maxlength')">You have more than 60 characters</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex="100" fxLayout="row" fxLayoutAlign="center center">
+            <mat-card-actions align="center">
+              <button mat-raised-button color="primary" [disabled]="!resourceForm.valid">Submit</button>
+              <button type="button" mat-raised-button color="warn" (click)="onCancel()">Cancel</button>
+            </mat-card-actions>
+          </div>
+
+        </form>
+
+      </mat-card-content>
+    </mat-card>
+
+  </div>
+</div>

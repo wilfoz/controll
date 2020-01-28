@@ -1,0 +1,75 @@
+<div layout="column" layout-fill>
+  <div align="center" layout="row" layout-align="center center">
+
+    <mat-card class="info-card mat-elevation-z8" flex="80" style="margin-top: 60px;width: 600px;;">
+
+      <mat-card-title>
+        {{ pageTitle }}
+      </mat-card-title>
+
+      <mat-divider></mat-divider>
+
+      <mat-card-content fxLayout="column" fxLayoutAlign="stretch">
+
+        <form fxLayout="column" fxLayoutAlign="start stretch" [formGroup]="resourceForm" autocomplete="off" novalidate
+          (ngSubmit)="submitForm(resourceForm.value)">
+
+          <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between  start">
+            <mat-form-field fxFlex="90">
+              <input matInput formControlName="date" [matDatepicker]="picker" placeholder="Informe a data">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+              <mat-error *ngIf="hasError('date', 'required')">Data e obrigatoria</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between  start">
+            <mat-form-field fxFlex="90">
+              <mat-label>Atividade</mat-label>
+              <select matNativeControl required formControlName="activity">
+                <option *ngFor="let activity of activities" [value]="activity">{{ activity }}</option>
+              </select>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between  start">
+            <mat-form-field fxFlex="90">
+              <mat-label>Torre</mat-label>
+              <select matNativeControl required formControlName="tower">
+                <option *ngFor="let tower of towers" [value]="tower">{{ tower }}</option>
+              </select>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between  start">
+            <mat-form-field fxFlex="90">
+              <mat-label>Encarregado</mat-label>
+              <select matNativeControl required formControlName="leader">
+                <option *ngFor="let leader of leaders" [value]="leader">{{ leader }}</option>
+              </select>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between  start">
+            <mat-form-field fxFlex="90">
+              <mat-label>Status</mat-label>
+              <select matNativeControl required formControlName="status">
+                <option *ngFor="let st of status" [value]="st">{{ st }}</option>
+              </select>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex="100" fxLayout="row" fxLayoutAlign="center center">
+            <mat-card-actions align="center">
+              <button mat-raised-button color="primary" [disabled]="!resourceForm.valid">Save</button>
+              <button type="button" mat-raised-button color="warn" (click)="onCancel()">Cancel</button>
+            </mat-card-actions>
+          </div>
+
+        </form>
+
+      </mat-card-content>
+    </mat-card>
+
+  </div>
+</div>

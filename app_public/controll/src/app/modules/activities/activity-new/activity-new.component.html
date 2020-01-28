@@ -1,0 +1,54 @@
+<div layout="column" layout-fill>
+  <div align="center" layout="row" layout-align="center center">
+
+    <mat-card class="info-card mat-elevation-z8" flex="80" style="margin-top: 60px;width: 600px;;">
+
+      <mat-card-title>
+        {{ pageTitle }}
+      </mat-card-title>
+
+      <mat-divider></mat-divider>
+
+      <mat-card-content fxLayout="column" fxLayoutAlign="stretch">
+
+        <form fxLayout="column" fxLayoutAlign="start stretch" [formGroup]="resourceForm" autocomplete="off" novalidate
+          (ngSubmit)="submitForm(resourceForm.value)">
+
+          <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between  start">
+            <mat-form-field fxFlex="90">
+              <mat-label>Etapa</mat-label>
+              <select matNativeControl required formControlName="group">
+                <option *ngFor="let group of groups" [value]="group">{{ group }}</option>
+              </select>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between  start">
+            <mat-form-field fxFlex="90">
+              <input matInput type="text" placeholder="Atividade:" formControlName="name" id="name">
+              <mat-error *ngIf="hasError('name', 'required')">Atividade e obrigatoria</mat-error>
+              <mat-error *ngIf="hasError('name', 'maxlength')">You have more than 15 characters</mat-error>
+            </mat-form-field>
+          </div>
+          <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between  start">
+            <mat-form-field fxFlex="90">
+              <input matInput type="text" placeholder="Unidade:" formControlName="unity" id="unity">
+              <mat-error *ngIf="hasError('unity', 'required')">Unidade e obrigatoria</mat-error>
+              <mat-error *ngIf="hasError('unity', 'maxlength')">You have more than 5 characters</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex="100" fxLayout="row" fxLayoutAlign="center center">
+            <mat-card-actions align="center">
+              <button mat-raised-button color="primary" [disabled]="!resourceForm.valid">Save</button>
+              <button type="button" mat-raised-button color="warn" (click)="onCancel()">Cancel</button>
+            </mat-card-actions>
+          </div>
+
+        </form>
+
+      </mat-card-content>
+    </mat-card>
+
+  </div>
+</div>

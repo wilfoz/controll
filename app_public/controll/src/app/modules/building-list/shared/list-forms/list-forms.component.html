@@ -1,0 +1,43 @@
+<form [formGroup]="form">
+
+  <mat-form-field class="half-width">
+    <input matInput type="text" placeholder="Torre:" formControlName="name" id="name">
+  </mat-form-field>
+
+  <mat-form-field class="half-width">
+    <input matInput type="text" placeholder="Tipo:" formControlName="type" id="type">
+  </mat-form-field>
+
+  <div formGroupName="coords">
+
+    <mat-form-field class="half-width">
+      <input matInput type="text" placeholder="Latitude:" formControlName="lat" id="lng">
+    </mat-form-field>
+    <mat-form-field class="half-width">
+      <input matInput type="text" placeholder="Longitude:" formControlName="lng" id="lat">
+    </mat-form-field>
+
+  </div>
+
+  <mat-form-field class="small-width">
+    <input matInput type="text" placeholder="Vão:" formControlName="forward" id="forward">
+  </mat-form-field>
+
+  <mat-form-field class="small-width">
+    <input matInput type="text" placeholder="Peso:" formControlName="weight" id="weight">
+  </mat-form-field>
+
+  <mat-form-field class="small-width">
+    <input matInput type="text" placeholder="Altura:" formControlName="height" id="height">
+  </mat-form-field>
+
+  <mat-form-field class="small-width">
+    <mat-label>Status</mat-label>
+    <select matNativeControl required formControlName="released" id="released">
+      <option value="LIBERADO">Liberado</option>
+      <option value="EMBARGO">Embargo</option>
+      <option value="ARQUEOLOGIA">Arqueologia</option>
+    </select>
+  </mat-form-field>
+
+</form>

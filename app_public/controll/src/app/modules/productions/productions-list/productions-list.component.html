@@ -1,0 +1,79 @@
+<div class="example-container">
+  <div layout="row" layout-align="space-between center" flex class="layout-align-space-between-center layout-row flex">
+    <mat-form-field>
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search Productions">
+    </mat-form-field>&nbsp;&nbsp;
+
+    <button class="btn-primary" mat-mini-fab matTooltip="Add a Production">
+      <mat-icon [routerLink]="['/productions-list/create']" aria-label="add production">add</mat-icon>
+    </button>
+  </div>
+</div>
+
+<div layout="column" layout-fill>
+  <div align="center" layout="row" layout-align="center center">
+    <table fxFlex mat-table [dataSource]="dataSource" matSort matSortActive="id" class="mat-elevation-z8">
+
+      <!-- Date Column -->
+      <ng-container matColumnDef="Date">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Data </th>
+        <td mat-cell *matCellDef="let element"> {{element.date | date:'dd-MM-yyyy'}} </td>
+      </ng-container>
+
+      <!-- Torre Column -->
+      <ng-container matColumnDef="Tower">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Torre </th>
+        <td mat-cell *matCellDef="let element"> {{element.tower.name}} </td>
+      </ng-container>
+
+      <!-- Activity Column -->
+      <ng-container matColumnDef="Activity">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Atividade </th>
+        <td mat-cell *matCellDef="let element"> {{element.activity.name}} </td>
+      </ng-container>
+
+      <!-- Leader Column -->
+      <ng-container matColumnDef="Leader">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Encarregado </th>
+        <td mat-cell *matCellDef="let element"> {{element.leader}} </td>
+      </ng-container>
+
+      <!-- Status Column -->
+      <ng-container matColumnDef="Status">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+        <td mat-cell *matCellDef="let element"> {{element.status}} </td>
+      </ng-container>
+
+      <!-- Action Column -->
+      <ng-container matColumnDef="details">
+        <th mat-header-cell *matHeaderCellDef> Details </th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-icon-button color="primary">
+            <mat-icon class="mat-18">reorder</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="update">
+        <th mat-header-cell *matHeaderCellDef> Update </th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-icon-button color="accent" matTooltip="edit a leader">
+            <mat-icon (click)="editLeader(element)" aria-label="edit leader">edit</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="delete">
+        <th mat-header-cell *matHeaderCellDef> Delete </th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-icon-button color="warn" (click)="deleteResource(element)">
+            <mat-icon class="mat-18">delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+</div>

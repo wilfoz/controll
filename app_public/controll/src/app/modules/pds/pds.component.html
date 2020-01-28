@@ -1,0 +1,106 @@
+<div class="example-container">
+    <div layout="row" layout-align="space-between center" flex
+        class="layout-align-space-between-center layout-row flex">
+        <button mat-raised-button color="primary" (click)="downloadPDF()">download PDF</button>
+    </div>
+</div>
+
+<br/>
+
+<mat-spinner *ngIf="isLoading"></mat-spinner>
+
+<div layout="column" layout-fill>
+    <div align="center" layout="row" layout-align="space-between center">
+
+
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" id="contentToConvert">
+
+            <!-- Activity Column -->
+            <ng-container matColumnDef="activity">
+                <th mat-header-cell *matHeaderCellDef> Atividade </th>
+                <td mat-cell *matCellDef="let element"> {{element.activity}} </td>
+            </ng-container>
+
+            <!-- Unity Column -->
+            <ng-container matColumnDef="unity">
+                <th mat-header-cell *matHeaderCellDef> Unid. </th>
+                <td mat-cell *matCellDef="let element"> {{element.unity}} </td>
+            </ng-container>
+
+            <!-- Foreseen Column -->
+            <ng-container matColumnDef="foreseen">
+                <th mat-header-cell *matHeaderCellDef> Previsto </th>
+                <td mat-cell *matCellDef="let element"> {{element.foreseen}} </td>
+            </ng-container>
+
+            <!-- inDay Column -->
+            <ng-container matColumnDef="inDay">
+                <th mat-header-cell *matHeaderCellDef> No Dia </th>
+                <td mat-cell *matCellDef="let element"> {{element.inDay}} </td>
+            </ng-container>
+
+            <!-- Previous Column -->
+            <ng-container matColumnDef="previous">
+                <th mat-header-cell *matHeaderCellDef> Ant. </th>
+                <td mat-cell *matCellDef="let element"> {{element.previous}} </td>
+            </ng-container>
+
+            <!-- Current Column -->
+            <ng-container matColumnDef="current">
+                <th mat-header-cell *matHeaderCellDef> Atual </th>
+                <td mat-cell *matCellDef="let element"> {{element.current}} </td>
+            </ng-container>
+
+            <!-- Accumulated Column -->
+            <ng-container matColumnDef="accumulated">
+                <th mat-header-cell *matHeaderCellDef> Acumulado </th>
+                <td mat-cell *matCellDef="let element"> {{element.accumulated}} </td>
+            </ng-container>
+
+            <!-- notExecuted Column -->
+            <ng-container matColumnDef="notExecuted">
+                <th mat-header-cell *matHeaderCellDef> À Executar </th>
+                <td mat-cell *matCellDef="let element"> {{element.notExecuted}} </td>
+            </ng-container>
+
+            <!-- Executed Column -->
+            <ng-container matColumnDef="executed">
+                <th mat-header-cell *matHeaderCellDef> Executado </th>
+                <td mat-cell *matCellDef="let element"> {{element.executed}} </td>
+            </ng-container>
+
+            <!-- Planned Column -->
+            <ng-container matColumnDef="planned">
+                <th mat-header-cell *matHeaderCellDef> Planejado </th>
+                <td mat-cell *matCellDef="let element"> {{element.planned}} </td>
+            </ng-container>
+
+            <!-- Leader Column -->
+            <ng-container matColumnDef="leader">
+                <th mat-header-cell *matHeaderCellDef> Encarregado </th>
+                <td mat-cell *matCellDef="let element"> {{element.leader}} </td>
+            </ng-container>
+
+            <!-- Logo Column -->
+            <ng-container matColumnDef="item-logo">
+                <th mat-header-cell *matHeaderCellDef colspan="2"> Logo </th>
+            </ng-container>
+
+            <!-- Description Column -->
+            <ng-container matColumnDef="item-description">
+                <th mat-header-cell *matHeaderCellDef colspan="8"> PROGRAMAÇÃO DIÁRIA DE SERVIÇOS </th>
+            </ng-container>
+
+            <!-- Client Column -->
+            <ng-container matColumnDef="item-client">
+                <th mat-header-cell *matHeaderCellDef> Logo Cliente </th>
+            </ng-container>
+
+
+            <tr mat-header-row *matHeaderRowDef="['item-logo', 'item-description', 'item-client']"
+                class="example-first-header-row"></tr>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns" class="example-second-header-row"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+    </div>
+</div>

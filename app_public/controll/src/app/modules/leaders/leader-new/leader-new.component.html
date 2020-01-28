@@ -1,0 +1,45 @@
+<div layout="column" layout-fill>
+  <div align="center" layout="row" layout-align="center center">
+
+    <mat-card class="info-card mat-elevation-z8" flex="80" style="margin-top: 60px;width: 600px;;">
+
+      <mat-card-title>
+        {{ pageTitle }}
+      </mat-card-title>
+
+      <mat-divider></mat-divider>
+
+      <mat-card-content fxLayout="column" fxLayoutAlign="stretch">
+
+        <form fxLayout="column" fxLayoutAlign="start stretch" [formGroup]="resourceForm" autocomplete="off" novalidate
+          (ngSubmit)="submitForm(resourceForm.value)">
+
+          <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between  start">
+            <mat-form-field fxFlex="90">
+              <input matInput type="text" placeholder="Nome:" formControlName="name" id="name">
+              <mat-error *ngIf="hasError('name', 'required')">Nome e obrigatorio</mat-error>
+              <mat-error *ngIf="hasError('name', 'maxlength')">You have more than 15 characters</mat-error>
+            </mat-form-field>
+          </div>
+          <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between  start">
+            <mat-form-field fxFlex="90">
+              <input matInput type="text" placeholder="Função:" formControlName="office" id="office">
+              <mat-error *ngIf="hasError('office', 'required')">Função e obrigatorio</mat-error>
+              <mat-error *ngIf="hasError('office', 'maxlength')">You have more than 8 characters</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex="100" fxLayout="row" fxLayoutAlign="center center">
+            <mat-card-actions align="center">
+              <button mat-raised-button color="primary" [disabled]="!resourceForm.valid">Save</button>
+              <button type="button" mat-raised-button color="warn" (click)="onCancel()">Cancel</button>
+            </mat-card-actions>
+          </div>
+
+        </form>
+
+      </mat-card-content>
+    </mat-card>
+
+  </div>
+</div>

@@ -1,0 +1,17 @@
+.full-width {
+  display: block;
+  width: 90%;
+}
+
+.half-width {
+  display: inline-block;
+  width: 45%;
+  margin: 4px;
+}
+
+.small-width {
+  display: inline-block;
+  width: 30%;
+  margin: 4px;
+}
+
