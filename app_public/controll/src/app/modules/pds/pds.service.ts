@@ -21,32 +21,30 @@ export class PdsService {
     private productionService: ProductionService
   ) { }
 
-
   getForDate(date) {
     let apiURL = URL + `?date=${date}`;
     this.http.get(apiURL)
-    .pipe(
-      map(production => Object.keys(production).map((k) => {
-        const { 
-                activity: { name }, 
-                activity: { unity }, 
-                tower: { name: tower }, 
-                tower: { forward }, 
-                leader, 
-                status 
-              } = production[k];
+      .pipe(
+        map(production => Object.keys(production).map((k) => {
+          const {
+            activity: { name },
+            activity: { unity },
+            tower: { name: tower },
+            tower: { forward },
+            leader,
+            status
+          } = production[k];
 
-        return ({ name, unity, tower, leader, status, forward });
-      }))
-    )
-    .subscribe((data) => {
-      this.productions = data;
-      this.productionsUpdated.next(this.productions);
-    });
+          return ({ name, unity, tower, leader, status, forward });
+        }))
+      )
+      .subscribe((data) => {
+        this.productions = data;
+        this.productionsUpdated.next(this.productions);
+      });
     return this.productionsUpdated.asObservable();
   }
 
-  
   getTotalTowers = (): Observable<number> => {
     return this.buildingListService.getAll()
       .pipe(
@@ -61,14 +59,14 @@ export class PdsService {
         ))
   }
 
-  productionsForActivity = (activity) => {
+  productionsForActivity = (activity): Observable<number> => {
     return this.productionService.getAll()
-    .pipe(
-      map((data) => data.filter((element: any) => {
-        const { activity: { name } } = element;
-        return name === activity;
-      }).length)
-    )
+      .pipe(
+        map((data) => data.filter((element: any) => {
+          const { activity: { name } } = element;
+          return name === activity;
+        }).length)
+      )
   }
 
 }

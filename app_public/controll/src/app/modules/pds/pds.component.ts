@@ -4,22 +4,7 @@ import * as jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { PDS } from './shared/pds';
 import { PdsService } from './pds.service';
-import { Subscription, throwError, Subject, BehaviorSubject } from 'rxjs';
-
-const ELEMENT_DATA: PDS[] = [
-  {
-    activity: 'Locação de Cavas', unity: 'torre', foreseen: 253, inDay: 1, previous: 0, current: 1,
-    accumulated: '1%', notExecuted: 252, executed: ['0/1'], planned: ['0/2', '0/1'], leader: ['João']
-  },
-  {
-    activity: 'Locação de Cavas', unity: 'torre', foreseen: 253, inDay: 1, previous: 0, current: 1,
-    accumulated: '1%', notExecuted: 252, executed: ['0/1'], planned: ['0/2'], leader: ['João']
-  },
-  {
-    activity: 'Locação de Cavas', unity: 'torre', foreseen: 253, inDay: 1, previous: 0, current: 1,
-    accumulated: '1%', notExecuted: 252, executed: ['0/1'], planned: ['0/2'], leader: ['João']
-  },
-];
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-pds',
@@ -31,11 +16,12 @@ export class PdsComponent implements OnInit {
   public displayedColumns: string[] = ['activity', 'unity', 'foreseen', 'inDay',
     'previous', 'current', 'accumulated', 'notExecuted', 'executed', 'planned', 'leader'];
 
-  public dataSource = new MatTableDataSource(ELEMENT_DATA);
+  public dataSource = new MatTableDataSource();
 
   public pdsSub: Subscription;
   public productions = [];
   public totalActivities: number;
+  public PDS = [];
   private expectedTowers: number;
   private expectedKm: number;
 
@@ -44,42 +30,55 @@ export class PdsComponent implements OnInit {
   ngOnInit() {
     this.getExpectedTowerTotal();
     this.getExpectedKmTotal();
-    this.PDSDataTransform ('2020-01-20');
+    this.PDSDataTransform('2020-01-28');
+
+
+    console.log(this.dataSource.data);
+
   }
 
   PDSDataTransform = (date) => {
     this.pdsSub = this.pdsService.getForDate(date)
       .subscribe((data) => {
+
         const group = this.group(data, 'name');
-        const pds = Object.keys(group).map((el) => {
+        Object.keys(group).map((el) => {
+          
           const { productions } = group[el];
 
-          let currencyActivity = group[el].name;         
-          
-          let totalKm = [...productions].reduce((acc, obj) => acc += +((obj.km/1000).toFixed(1)), 0);          
-          let totalTowers = [...productions].filter(element => element.status == 'EXECUTADO').length;
-          let prod = [...productions].filter(element => element.status == 'EXECUTADO').map(el => el.tower);
-          let plan = [...productions].filter(element => element.status == 'PROGRAMADO').map(el => el.tower);
-          let foreseen = group[el].unity === 'torre' ? this.expectedTowers : this.expectedKm;
-          let inDay = group[el].unity === 'torre' ? totalTowers : totalKm;
-          let previous = (foreseen - inDay);
-          
-          return {
-            activity: group[el].name,
-            unity: group[el].unity,
-            foreseen,
-            previous,
-            current: 0,
-            accumulated: 0,
-            notExecuted: 0,
-            inDay: inDay,
-            plan,
-            prod
-          }
-        })
+          let currencyActivity = group[el].name;
 
-        this.productions = pds;
-        console.log(this.productions);
+          this.pdsService.productionsForActivity(currencyActivity).subscribe((data) => {
+
+            let totalKm = [...productions].reduce((acc, obj) => acc += +((obj.km / 1000).toFixed(1)), 0);
+            let totalTowers = [...productions].filter(element => element.status == 'EXECUTADO').length;
+            let executed = [...productions].filter(element => element.status == 'EXECUTADO').map(el => el.tower);
+            let planned = [...productions].filter(element => element.status == 'PROGRAMADO').map(el => el.tower);
+            let foreseen = group[el].unity === 'torre' ? this.expectedTowers : this.expectedKm;
+            let inDay = group[el].unity === 'torre' ? totalTowers : totalKm;
+            let previous = (foreseen - inDay);
+
+            const isExist = this.PDS.find(data => data.activity == group[el].name);
+
+            if (!isExist) {
+              this.PDS.push({
+                activity: group[el].name,
+                unity: group[el].unity,
+                foreseen,
+                previous,
+                current: 0,
+                accumulated: data,
+                notExecuted: 0,
+                inDay: inDay,
+                planned,
+                executed,
+                leader: group[el].leader
+              });
+            }
+          });
+        })
+        console.log(this.PDS);
+        this.dataSource.data = this.PDS;
       });
   }
 
@@ -106,6 +105,7 @@ export class PdsComponent implements OnInit {
     return acc;
   };
 
+
   protected find = (acc, cur, el) => acc.find(obj => obj[el] == cur[el]);
 
   protected group = (obj, groupBy = 'name') => obj.reduce(this.flatten(groupBy), []);
@@ -115,13 +115,13 @@ export class PdsComponent implements OnInit {
   }
 
   protected getExpectedKmTotal = () => {
-    this.pdsService.getTotalKm().subscribe(data => this.expectedKm = +((data/1000).toFixed(0)));
-  } 
-
-  getTotalForActivity = (activity) => {
-    this.pdsService.productionsForActivity(activity).subscribe(data => data)
+    this.pdsService.getTotalKm().subscribe(data => this.expectedKm = +((data / 1000).toFixed(0)));
   }
-  
+
+  protected getTotalForActivity = (activity) => {
+    this.pdsService.productionsForActivity(activity).subscribe((data) => this.totalActivities = data);
+  }
+
   downloadPDF() {
     let data = document.getElementById('contentToConvert');
     html2canvas(data).then(canvas => {
@@ -139,7 +139,8 @@ export class PdsComponent implements OnInit {
     });
   }
 
-  /*ngOnDestroy() {
+  ngOnDestroy() {
     this.pdsSub.unsubscribe();
-  }*/
+  }
+
 }
