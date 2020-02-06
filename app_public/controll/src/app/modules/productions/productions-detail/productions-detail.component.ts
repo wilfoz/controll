@@ -46,7 +46,6 @@ export class ProductionsDetailComponent implements OnInit {
   }
 
   setProductionList = (form) => {
-    // tslint:disable-next-line:variable-name
     const { id: _id, date, tower, activity, leader, status } = form;
     return { _id, date, tower, activity, leader, status };
   }

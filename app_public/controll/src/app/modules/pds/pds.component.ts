@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { MatTableDataSource } from '@angular/material';
+import { MatTableDataSource, MatDatepickerInputEvent } from '@angular/material';
 import * as jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-import { PDS } from './shared/pds';
 import { PdsService } from './pds.service';
 import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-pds',
   templateUrl: './pds.component.html',
-  styleUrls: ['./pds.component.scss']
+  styleUrls: ['./pds.component.scss'],
+
 })
 export class PdsComponent implements OnInit {
 
@@ -18,10 +18,8 @@ export class PdsComponent implements OnInit {
 
   public dataSource = new MatTableDataSource();
 
-  public pdsSub: Subscription;
   public productions = [];
   public totalActivities: number;
-  public PDS = [];
   private expectedTowers: number;
   private expectedKm: number;
 
@@ -30,64 +28,83 @@ export class PdsComponent implements OnInit {
   ngOnInit() {
     this.getExpectedTowerTotal();
     this.getExpectedKmTotal();
-    this.PDSDataTransform('2020-01-28');
+    
+  }
 
+  changeDate = (event: MatDatepickerInputEvent<Date>) => {
 
-    console.log(this.dataSource.data);
+    const current = new Date(event.value);
+    const previous = new Date();
+    previous.setDate(current.getDate() - 1);
+
+    const formatedCurrent = current.toLocaleDateString();
+    const formatedPrevious = previous.toLocaleDateString();
+
+    this.PDSDataTransform(formatedPrevious, formatedCurrent);
 
   }
 
-  PDSDataTransform = (date) => {
-    this.pdsSub = this.pdsService.getForDate(date)
+  PDSDataTransform = (start, end) => {
+    this.pdsService.getForDate(start, end)
       .subscribe((data) => {
-
         const group = this.group(data, 'name');
-        Object.keys(group).map((el) => {
-          
+        const pds = Object.keys(group).map((el) => {
           const { productions } = group[el];
+          
+          let totalKm = [...productions].filter(element => element.status == 'EXECUTADO')
+                                          .reduce((acc, obj) => acc += +((obj.km / 1000).toFixed(1)), 0);                              
+          let executed = [...productions].filter(element => element.status == 'EXECUTADO').map(el => el.tower);
+          let planned = [...productions].filter(element => element.status == 'PROGRAMADO').map(el => el.tower);
+          let progress = [...productions].filter(element => element.status == 'ANDAMENTO').map(el => el.tower);
+          let foreseen = group[el].unity === 'torre' ? this.expectedTowers : this.expectedKm;
+          let inDay = group[el].unity === 'torre' ? executed.length : totalKm;
+        
+          const obj = {
+            activity: group[el].name,
+            unity: group[el].unity,
+            foreseen,
+            previous: 0,
+            current: 0,
+            accumulated: '',
+            notExecuted: 0,
+            inDay: inDay,
+            planned: planned.join(', ') + (progress.length > 0 ? `, ${progress}` : ''),
+            executed: executed.join(', ') + (progress.length > 0 ? `, ${progress} (And),` : ''),
+            leader: group[el].leader
+          }
 
           let currencyActivity = group[el].name;
 
-          this.pdsService.productionsForActivity(currencyActivity).subscribe((data) => {
-
-            let totalKm = [...productions].reduce((acc, obj) => acc += +((obj.km / 1000).toFixed(1)), 0);
-            let totalTowers = [...productions].filter(element => element.status == 'EXECUTADO').length;
-            let executed = [...productions].filter(element => element.status == 'EXECUTADO').map(el => el.tower);
-            let planned = [...productions].filter(element => element.status == 'PROGRAMADO').map(el => el.tower);
-            let foreseen = group[el].unity === 'torre' ? this.expectedTowers : this.expectedKm;
-            let inDay = group[el].unity === 'torre' ? totalTowers : totalKm;
-            let previous = (foreseen - inDay);
-
-            const isExist = this.PDS.find(data => data.activity == group[el].name);
-
-            if (!isExist) {
-              this.PDS.push({
-                activity: group[el].name,
-                unity: group[el].unity,
-                foreseen,
-                previous,
-                current: 0,
-                accumulated: data,
-                notExecuted: 0,
-                inDay: inDay,
-                planned,
-                executed,
-                leader: group[el].leader
-              });
-            }
-          });
-        })
-        console.log(this.PDS);
-        this.dataSource.data = this.PDS;
+          if(obj.unity === 'torre') {
+            this.pdsService.getTotalTowersByActivity(currencyActivity).subscribe(total => {
+              obj.current = total;
+              obj.notExecuted = +(obj.foreseen - total);
+              obj.previous = total - obj.inDay;
+              obj.accumulated = `${(obj.notExecuted / obj.foreseen).toFixed(0)}%`
+            });
+          }else {
+            this.pdsService.getTotalKmByActivity(currencyActivity).subscribe(total => {
+              let km = (total/1000)
+              obj.current = +(km).toFixed(1);
+              obj.notExecuted = +(obj.foreseen - km).toFixed(1);
+              obj.previous = +((km - obj.inDay).toFixed(1));
+              obj.accumulated = `${(obj.notExecuted / obj.foreseen).toFixed(0)}%`
+            });
+          }
+          return obj;
+        });
+        this.dataSource.data = pds;
       });
   }
 
   protected flatten = groupBy => (acc, cur) => {
     const getNode = this.find(acc, cur, groupBy);
+
     getNode
       ? getNode.productions.push({
         tower: cur.tower,
         km: +(cur.forward),
+        date: cur.date,
         status: cur.status
       })
       : acc.push({
@@ -98,13 +115,13 @@ export class PdsComponent implements OnInit {
           {
             tower: cur.tower,
             km: +(cur.forward),
+            date: cur.date,
             status: cur.status
           },
         ],
       });
     return acc;
   };
-
 
   protected find = (acc, cur, el) => acc.find(obj => obj[el] == cur[el]);
 
@@ -116,10 +133,6 @@ export class PdsComponent implements OnInit {
 
   protected getExpectedKmTotal = () => {
     this.pdsService.getTotalKm().subscribe(data => this.expectedKm = +((data / 1000).toFixed(0)));
-  }
-
-  protected getTotalForActivity = (activity) => {
-    this.pdsService.productionsForActivity(activity).subscribe((data) => this.totalActivities = data);
   }
 
   downloadPDF() {
@@ -140,7 +153,7 @@ export class PdsComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.pdsSub.unsubscribe();
+    //
   }
 
 }

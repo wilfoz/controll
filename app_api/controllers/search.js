@@ -5,16 +5,14 @@ const Prod = mongoose.model('Production');
 
 const productionsFind = (req, res) => {
 
-    const { date } = req.query;
-    const newDate = moment(date).format("L");
+    let start = moment(req.query.start, 'DD/MM/YYYY', true).format();
+    let end = moment(req.query.end, 'DD/MM/YYYY', true).add( 3, 'hours' ).format();
 
-    console.log(newDate);
+    console.log(start, end);
 
     Prod
         .find({
-            date: {
-                $in: newDate
-            },
+            date: { $gte: start, $lte: end },
         })
         .populate({ path: 'tower' })
         .populate({ path: 'activity' })

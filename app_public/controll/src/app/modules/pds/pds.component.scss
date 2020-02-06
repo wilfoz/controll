@@ -7,13 +7,11 @@ table {
   }
   
   .example-second-header-row {
-    font-style: italic;
+    border-color: darken($color: #000000, $amount: 0);
   }
   
-  .example-first-footer-row {
-    font-weight: bold;
+  .example-third-header-row {
+    font-style: normal;
   }
+
   
-  .example-second-footer-row td {
-    color: #900000;
-  }

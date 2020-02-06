@@ -66,14 +66,11 @@ const setModelsIds = (nameTower, nameActivity) => {
 
 const productionCreate = (req, res) => {
 
-  let formatDate = moment(req.body.date).format("L");
-  console.log(formatDate);
-
   setModelsIds(req.body.tower, req.body.activity)
     .then((results) => {
       Prod
         .create({
-          date: formatDate,
+          date: new Date(req.body.date),
           leader: req.body.leader,
           tower: results[0],
           activity: results[1],
