@@ -24,6 +24,9 @@ const routes: Routes = [{
   }, {
     path: 'pds',
     loadChildren: () => import('./modules/pds/pds.module').then(mod => mod.PdsModule)
+  },{
+    path: 'weekly',
+    loadChildren: () => import('./modules/weekly-schedule/weekly-schedule.module').then(mod => mod.WeeklyModule)
   }]
 }];
 

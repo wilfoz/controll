@@ -21,7 +21,7 @@ import { ProductionModule } from '../../modules/productions/production.module';
     BuildingListModule,
     ActivityModule,
     LeaderModule,
-    ProductionModule
+    ProductionModule,
   ],
   providers: [
   ]

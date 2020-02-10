@@ -1,0 +1,151 @@
+<div class="example-container">
+    <div layout="row" layout-align="space-between center" flex
+        class="layout-align-space-between-center layout-row flex">
+        <button mat-raised-button color="primary" (click)="downloadPDF()">PDF</button>
+    </div>
+
+    <br />
+
+    <!--<mat-spinner *ngIf="isLoading"></mat-spinner>-->
+
+    <div layout="column" layout-fill id="contentToConvert">
+        <div align="center" layout="row" flexlayout-align="space-between center">
+
+            <table mat-table class="mat-elevation-z8 table-header-one" multiTemplateDataRows>
+
+                <!-- Header Logo -->
+                <ng-container matColumnDef="logo">
+                    <th mat-header-cell class="header-logo" *matHeaderCellDef [attr.rowspan]="2"> LOGO </th>
+                </ng-container>
+
+                <!-- Header Title -->
+                <ng-container matColumnDef="title">
+                    <th mat-header-cell id="head-title" *matHeaderCellDef [attr.colspan]="6"> PROGRAMAÇÃO SEMANAL </th>
+                </ng-container>
+
+                <!-- Header Client -->
+                <ng-container matColumnDef="client">
+                    <th mat-header-cell class="client" *matHeaderCellDef [attr.colspan]="4"> CONTRATANTE </th>
+                </ng-container>
+
+                <!-- Header Company -->
+                <ng-container matColumnDef="company">
+                    <th mat-header-cell class="company" *matHeaderCellDef [attr.colspan]="4"> CONTRATADA </th>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="['logo', 'title']"></tr>
+                <tr mat-header-row *matHeaderRowDef="['company', 'client']"></tr>
+            </table>
+
+            <br />
+
+            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" multiTemplateDataRows>
+
+                
+                <!-- Activity Column -->
+                <ng-container matColumnDef="secondary">
+                    <td mat-cell [attr.colspan]="displayedColumns.length" *matCellDef="let element"> {{element.activity}} </td>
+                    <td mat-footer-cell *matFooterCellDef></td>
+                </ng-container>
+
+                <!-- Leader Column -->
+                <ng-container matColumnDef="Encarregado">
+                    <th mat-header-cell *matHeaderCellDef> Encarregado </th>
+                    <td mat-cell *matCellDef="let element"> {{element.leader}} </td>
+                    <td mat-footer-cell *matFooterCellDef></td>
+                </ng-container>
+
+                <!-- Monday Column -->
+                <ng-container matColumnDef="Segunda">
+                    <th mat-header-cell *matHeaderCellDef> Segunda </th>
+                    <td mat-cell *matCellDef="let element">
+                        <div>
+                            Executado: {{element.monday.executed}}
+                        </div>
+                        <div>
+                            Planejado: {{element.monday.planned}}
+                        </div>
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef></td>
+                </ng-container>
+
+                <!-- Tuesday Column -->
+                <ng-container matColumnDef="Terça">
+                    <th mat-header-cell *matHeaderCellDef> Terça </th>
+                    <td mat-cell *matCellDef="let element">
+                        <div>
+                            {{element.tuesday.executed}}
+                        </div>
+                        <div>
+                            {{element.tuesday.planned}}
+                        </div>
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef></td>
+                </ng-container>
+
+                <!-- Fourth Column -->
+                <ng-container matColumnDef="Quarta">
+                    <th mat-header-cell *matHeaderCellDef> Quarta </th>
+                    <td mat-cell *matCellDef="let element">
+                        <div>
+                            {{element.fourth.executed}}
+                        </div>
+                        <div>
+                            {{element.fourth.planned}}
+                        </div>
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef></td>
+                </ng-container>
+
+                <!-- Fifth Column -->
+                <ng-container matColumnDef="Quinta">
+                    <th mat-header-cell *matHeaderCellDef> Quinta </th>
+                    <td mat-cell *matCellDef="let element">
+                        <div>
+                            {{element.fifth.executed}}
+                        </div>
+                        <div>
+                            {{element.fifth.planned}}
+                        </div>
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef></td>
+                </ng-container>
+
+                <!-- Friday Column -->
+                <ng-container matColumnDef="Sexta">
+                    <th mat-header-cell *matHeaderCellDef> Sexta </th>
+                    <td mat-cell *matCellDef="let element">
+                        <div>
+                            {{element.friday.executed}}
+                        </div>
+                        <div>
+                            {{element.friday.planned}}
+                        </div>
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef></td>
+                </ng-container>
+
+                <!-- Saturday Column -->
+                <ng-container matColumnDef="Sabado">
+                    <th mat-header-cell *matHeaderCellDef> Sabado </th>
+                    <td mat-cell *matCellDef="let element">
+                        <div>
+                            {{ element.saturday.executed }}
+                        </div>
+                        <div>
+                            {{ element.saturday.planned }}
+                        </div>
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef></td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: ['secondary'];"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></tr>
+
+            </table>
+        </div>
+    </div>
+
+</div>
