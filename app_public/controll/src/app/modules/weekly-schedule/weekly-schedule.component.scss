@@ -1,3 +1,17 @@
 table {
     width: 100%;
   }
+
+  td {
+    border-right: 1px solid rgba(0,0,0,.12);
+  }
+
+  .innerLine {
+    padding: 0px;
+  }
+
+  .innerLine div {
+    padding: 5px;
+    border-bottom: 1px solid rgba(0,0,0,.12);
+  }
+
