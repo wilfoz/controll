@@ -1,9 +1,9 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
 import { Weeks } from './shared/weekly-schedule.model';
-import { ProductionService } from '../productions/production.service';
-import { map, tap, reduce } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Subject, Observable } from 'rxjs';
+import * as moment from 'moment';
 
 const URL = 'http://localhost:3000/api/production/';
 
@@ -12,16 +12,16 @@ const URL = 'http://localhost:3000/api/production/';
 })
 export class WeeklyScheduleService {
 
-  private arrWeek = ['sanday', 'monday', 'tuesday', 'fourth', 'fifth', 'friday', 'saturday'];
-
-  private weeksHeaders = [];
+  public headers: any[] = [];
+  private arrWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  private initialDate: Date;
   private productionsUpdated$ = new Subject<any[]>();
 
   constructor(
     private http: HttpClient,
   ) { }
 
-  getWeeks = (start, end) => {
+  getWeeks = (start, current,  end): void => {
     let apiURL = URL + `?start=${start}&end=${end}`;
     this.http.get(apiURL).pipe(
       map((data) => Object.keys(data).map(k => {
@@ -31,78 +31,99 @@ export class WeeklyScheduleService {
         return ({ date, locality, name, tower, leader, status });
       })))
       .subscribe((data) => {
-        this.weeksHeaders.push(this.getWeeksHeaders(new Date(start)));
+        this.initialDate = current;
         this.productionsUpdated$.next(this.groupByActivity(data, 'name'));
       });
   }
 
-  getHeaders = () => {
-    console.log('service: ', this.weeksHeaders)
-    return this.weeksHeaders;
-  }
+  getData = (): Observable<Weeks[]> => this.productionsUpdated$.asObservable();
 
-  getData = () => {
-    return this.productionsUpdated$.asObservable();
-  }
+  getHeaders = (initialDate: string): any[] => this.getWeeksHeaders(initialDate);
 
-  protected getWeeksHeaders = (initialDate: Date): any[] => {
+  protected getWeeksHeaders = (initialDate: string) => {
 
-    const weeksPT = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sabado']
+    const weeksPT = this.setArrayWeeks(initialDate, "pt");
+    const weeksUS = this.setArrayWeeks(initialDate, "us");;
 
     return weeksPT.map((weekPT, i) => {
 
-      const afterDate = new Date();
-      afterDate.setDate(initialDate.getDate() + i);
-
-      const beforeDate = new Date();
-      beforeDate.setDate(afterDate.getDate() - 7);
+      const currentDate = moment(initialDate, "DD/MM/YYYY");
+      const afterDate = currentDate.add(i, "days").format("DD/MM/YYYY");
+      const nextDate = currentDate.add("7", "days").format("DD/MM/YYYY");
 
       return {
         key: weekPT,
-        header1: `${weekPT}: ${beforeDate.toLocaleDateString()}`,
-        header2: `${weekPT}: ${afterDate.toLocaleDateString()}`,
-        cell: this.arrWeek[i]
+        header1: `${weekPT}: ${afterDate}`,
+        header2: `${weekPT}: ${afterDate}`,
+        header3: `${weekPT}: ${nextDate}`,
+        cell: weeksUS[i]
       }
-
     })
   }
 
-  protected groupByActivity = (obj, groupBy = 'name') => obj.reduce((acc, cur) => {
-    const week = acc.find((obj) => obj[groupBy] == cur[groupBy]);
+  protected groupByActivity = (obj, groupBy = 'name'): Weeks[] => obj.reduce((acc, cur) => {
+    const activity = acc.find((el) => el[groupBy] == cur[groupBy]);
 
-    const dayOfTheWeek = this.getDayOfTheWeek(cur.date);
+    const dayOfTheWeek = this.getDayOfTheWeek(cur['date']);
+    const prod = this.setPlanningWeek(cur['status'], cur['tower'], cur['date']);
+    const isExistProductions = { executed: prod.executed || ' ', planned: prod.planned || ' ', nextPlanned: prod.planned || ' '  };
+    const weekIsTrue = week => dayOfTheWeek === week ? isExistProductions : { executed: ' ', planned: ' ', nextPlanned: ' ' };
 
-    let prod = cur['status'] === 'EXECUTADO' ? { executed: `${cur['tower']}, ` } : { planned: `${cur['tower']}, ` };
+    if (activity) {
 
-    if (week) {
+      activity[dayOfTheWeek].executed
+        ? activity[dayOfTheWeek].executed += `${prod.executed || ''}`
+        : { executed: ' ', planned: ' ', nextPlanned: ' ' };
 
-      week[dayOfTheWeek] && week[dayOfTheWeek].planned
-        ? week[dayOfTheWeek].planned += `${prod.planned || ''}`
-        : null;
+      activity[dayOfTheWeek].planned
+        ? activity[dayOfTheWeek].planned += `${prod.planned || ''}`
+        : { executed: ' ', planned: ' ', nextPlanned: ' ' };
 
-      week[dayOfTheWeek] && week[dayOfTheWeek].executed
-        ? week[dayOfTheWeek].executed += `${prod.executed || ''}`
-        : null;
-
-      if (!week.hasOwnProperty(dayOfTheWeek))
-        week[dayOfTheWeek] = { planned: prod.planned || ' ', executed: prod.executed || ' ' }
+      activity[dayOfTheWeek].nextPlanned
+        ? activity[dayOfTheWeek].nextPlanned += `${prod.nextPlanned || ''}`
+        : { executed: ' ', planned: ' ', nextPlanned: ' ' };
 
     } else {
       acc.push({
         [groupBy]: cur[groupBy],
         locality: cur['locality'],
         leader: cur['leader'],
-        [dayOfTheWeek]: { planned: prod.planned || ' ', executed: prod.executed || ' ' },
+        Sunday: weekIsTrue('Sunday'),
+        Monday: weekIsTrue('Monday'),
+        Tuesday: weekIsTrue('Tuesday'),
+        Wednesday: weekIsTrue('Wednesday'),
+        Thursday: weekIsTrue('Thursday'),
+        Friday: weekIsTrue('Friday'),
+        Saturday: weekIsTrue('Saturday'),
+        totalPlanned: (prod.hasOwnProperty('planned') ? 1 : 0),
+        totalExecuted: (prod.hasOwnProperty('executed') ? 1 : 0),
+        totalNPlanned: (prod.hasOwnProperty('nextPlanned') ? 1 : 0),
       })
     }
-
+    console.log(acc);
     return acc;
-
   }, []);
 
-  protected getDayOfTheWeek = (date: Date) => {
-    const day = new Date(date);
-    return this.arrWeek[day.getDay()];
+  protected setArrayWeeks = (initialDate, local) => {
+    const weeks = [];
+    for (let i = 0; i < 7; i++) {
+      const nexDayOfTheWeekPT = moment(initialDate, "DD/MM/YYYY", `${local}`).add(i, "days");
+      const dayOfTheWeekCurrentPT = nexDayOfTheWeekPT.format("dddd");
+      weeks.push(dayOfTheWeekCurrentPT);
+    }
+    return weeks;
   }
+  
+  protected setPlanningWeek = (status, tower, date) => {
+    const currentDate = moment(date).format("DD/MM/YYYY");
+    const afterDate = moment(this.initialDate, "DD/MM/YYYY").add("7", "days").format("DD/MM/YYYY");
+    
+    if (currentDate < afterDate) {
+      return status === 'EXECUTADO' ? { executed: `${tower}, ` } : { planned: `${tower}, ` };
+    } 
+    return { nextPlanned: `${tower}, ` }
+  }
+  
+  protected getDayOfTheWeek = (date: Date) => this.arrWeek[new Date(date).getDay()];
 
 }

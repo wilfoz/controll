@@ -8,26 +8,16 @@ export class Weeks extends BaseResourceModel {
         public locality?: string,
         public name?: string,
         public leader?: string,
-        public monday?: any,
-        public tuesday?: any,
-        public fourth?: any,
-        public fifth?: any,
-        public friday?: any,
-        public saturday?: any,
+        public monday?: string,
+        public tuesday?: string,
+        public fourth?: string,
+        public fifth?: string,
+        public friday?: string,
+        public saturday?: string,
+        public sanday?: string,
  
     ) {
         super();
-    }
-
-    public setAtr (atrs: any[]) {
-        atrs.map((data) => {
-           this[data[0]] = data[1]
-        });
-    }
-
-    public setWeeksAtr (week: string, status: string, tower: string) {
-        const dataWeek = status === 'EXECUTADO' ? { executed: tower } : { planned: tower }
-        this[week] = dataWeek;
     }
 
 }

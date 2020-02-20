@@ -1,17 +1,49 @@
 table {
     width: 100%;
+    border: 1px solid rgba(0, 0, 0, 0.250);
   }
 
-  td {
+  .table-header-one th{
+    padding: 8px;
+    margin: 10px;
+    border: solid 1px rgba(0, 0, 0, 0.250);
+    margin-left: 10px;
+    background-color: snow;
+    color: black;
+    font-weight: bolder;
+  } 
+  
+  .table-header-two th {
+    background-color:lightgray;
+    border: solid 1px rgba(0, 0, 0, 0.250);
+    color: black;
+    font-weight: bolder;
+    text-align: center;
+    padding: 4px;
+  }
+
+  .table-header-two td {
     border-right: 1px solid rgba(0,0,0,.12);
+    margin-left: 5px;
+    padding: 4px;
   }
 
-  .innerLine {
-    padding: 0px;
+  .wrapper {
+    display: grid;
+    grid-template-rows: 28px 28px 28px;
+  }
+  .wrapper div {
+    padding: 4px;
   }
 
-  .innerLine div {
-    padding: 5px;
+  .innerRow1 {
     border-bottom: 1px solid rgba(0,0,0,.12);
+    font-weight: bolder;
+    color: darkblue;
   }
 
+  .innerRow2 {
+    border-bottom: 1px solid rgba(0,0,0,.12);
+    font-weight: bolder;
+    color: seagreen;
+  }
