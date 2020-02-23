@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
 import { Weeks } from './shared/weekly-schedule.model';
 import { map } from 'rxjs/operators';
-import { Subject, Observable } from 'rxjs';
+import { Subject, Observable, BehaviorSubject } from 'rxjs';
 import * as moment from 'moment';
 
 const URL = 'http://localhost:3000/api/production/';
@@ -15,23 +15,22 @@ export class WeeklyScheduleService {
   public headers: any[] = [];
   private arrWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   private initialDate: Date;
-  private productionsUpdated$ = new Subject<any[]>();
+  private productionsUpdated$ = new BehaviorSubject<Weeks[]>([]);
 
   constructor(
     private http: HttpClient,
   ) { }
 
-  getWeeks = (start, current,  end): void => {
+  getWeeks = (start,  end): void => {
     let apiURL = URL + `?start=${start}&end=${end}`;
     this.http.get(apiURL).pipe(
       map((data) => Object.keys(data).map(k => {
-
         const { date, tower: { locality }, leader,
           status, activity: { name }, tower: { name: tower } } = data[k];
         return ({ date, locality, name, tower, leader, status });
       })))
       .subscribe((data) => {
-        this.initialDate = current;
+        this.initialDate = start;
         this.productionsUpdated$.next(this.groupByActivity(data, 'name'));
       });
   }
@@ -66,22 +65,28 @@ export class WeeklyScheduleService {
 
     const dayOfTheWeek = this.getDayOfTheWeek(cur['date']);
     const prod = this.setPlanningWeek(cur['status'], cur['tower'], cur['date']);
-    const isExistProductions = { executed: prod.executed || ' ', planned: prod.planned || ' ', nextPlanned: prod.planned || ' '  };
+    const isExistProductions = { executed: prod.executed || ' ', planned: prod.planned || ' ', nextPlanned: prod.nextPlanned || ' ' };
     const weekIsTrue = week => dayOfTheWeek === week ? isExistProductions : { executed: ' ', planned: ' ', nextPlanned: ' ' };
 
     if (activity) {
-
-      activity[dayOfTheWeek].executed
-        ? activity[dayOfTheWeek].executed += `${prod.executed || ''}`
+      
+      const planning = activity[dayOfTheWeek];
+      
+      planning.planned
+        ? planning.planned += `${prod.planned || ''}`
         : { executed: ' ', planned: ' ', nextPlanned: ' ' };
 
-      activity[dayOfTheWeek].planned
-        ? activity[dayOfTheWeek].planned += `${prod.planned || ''}`
+      planning.executed
+        ? planning.executed += `${prod.executed || ''}`
         : { executed: ' ', planned: ' ', nextPlanned: ' ' };
 
-      activity[dayOfTheWeek].nextPlanned
-        ? activity[dayOfTheWeek].nextPlanned += `${prod.nextPlanned || ''}`
+      planning.nextPlanned
+        ? planning.nextPlanned += `${prod.nextPlanned || ''}`
         : { executed: ' ', planned: ' ', nextPlanned: ' ' };
+
+        activity.totalPlanned += (prod.hasOwnProperty('planned') ? 1 : 0);
+        activity.totalExecuted += (prod.hasOwnProperty('executed') ? 1 : 0);
+        activity.totalNPlanned += (prod.hasOwnProperty('nextPlanned') ? 1 : 0);
 
     } else {
       acc.push({
@@ -100,7 +105,6 @@ export class WeeklyScheduleService {
         totalNPlanned: (prod.hasOwnProperty('nextPlanned') ? 1 : 0),
       })
     }
-    console.log(acc);
     return acc;
   }, []);
 
@@ -108,8 +112,8 @@ export class WeeklyScheduleService {
     const weeks = [];
     for (let i = 0; i < 7; i++) {
       const nexDayOfTheWeekPT = moment(initialDate, "DD/MM/YYYY", `${local}`).add(i, "days");
-      const dayOfTheWeekCurrentPT = nexDayOfTheWeekPT.format("dddd");
-      weeks.push(dayOfTheWeekCurrentPT);
+      const currentDay = nexDayOfTheWeekPT.format("dddd");
+      weeks.push(currentDay);
     }
     return weeks;
   }
@@ -117,11 +121,11 @@ export class WeeklyScheduleService {
   protected setPlanningWeek = (status, tower, date) => {
     const currentDate = moment(date).format("DD/MM/YYYY");
     const afterDate = moment(this.initialDate, "DD/MM/YYYY").add("7", "days").format("DD/MM/YYYY");
-    
+
     if (currentDate < afterDate) {
       return status === 'EXECUTADO' ? { executed: `${tower}, ` } : { planned: `${tower}, ` };
     } 
-    return { nextPlanned: `${tower}, ` }
+    return status !== 'EXECUTADO' ? { nextPlanned: `${tower}, ` } : { nextPlanned: ' ' } ;
   }
   
   protected getDayOfTheWeek = (date: Date) => this.arrWeek[new Date(date).getDay()];

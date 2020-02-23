@@ -30,7 +30,8 @@ table {
 
   .wrapper {
     display: grid;
-    grid-template-rows: 28px 28px 28px;
+    grid-template-rows: minmax(28.5px, 1fr) 1fr 1fr;
+
   }
   .wrapper div {
     padding: 4px;

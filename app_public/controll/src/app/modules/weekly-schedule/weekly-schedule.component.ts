@@ -5,7 +5,6 @@ import { Subscription } from 'rxjs';
 import { WeeklyScheduleService } from './weekly-schedule.service'
 import { FormControl } from '@angular/forms';
 
-
 @Component({
   selector: 'app-weekly-schedule',
   templateUrl: './weekly-schedule.component.html',
@@ -25,38 +24,38 @@ export class WeeklyScheduleComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.setInitialDate();
-    this.weeklyScheduleSub = this.weeklyScheduleService.getData().subscribe(data =>  {
-      this.dataSource.data = data;
-    });
+    this.setData(this.date);
+    this.weeklyScheduleSub = this.getData();
   } 
 
-  setInitialDate = () => {
-    const current = (this.date.value).toLocaleDateString();
-    const beforeDate = moment(current, "DD/MM/YYYY").subtract("7", "days").format("DD/MM/YYYY");
-    const afterDate = moment(current, "DD/MM/YYYY").add("7", "days").format("DD/MM/YYYY");
-    
-    this.weeklyScheduleService.getWeeks(beforeDate, current ,afterDate);
-    this.headers = this.weeklyScheduleService.getHeaders(current);
-    
-    this.setDisplayedColumns(this.headers);
-    
+  getData = () => this.weeklyScheduleService.getData().subscribe(data => this.dataSource.data = data);
+  
+  changeDate = (event: MatDatepickerInputEvent<Date>) => this.setData(event);
+
+  setData = (date: any) => {
+    const dates = this.setDate(date);
+    this.weeklyScheduleService.getWeeks(dates.current, dates.afterDate);
+    this.getData();
+    this.headers = this.weeklyScheduleService.getHeaders(dates.current);
+    this.setHeaders(this.headers);
   }
   
-  changeDate = (event: MatDatepickerInputEvent<Date>) => {
+  setDate = (date: any) => {
+    const current = (date.value).toLocaleDateString();
+    const afterDate = moment(current, "DD/MM/YYYY").add("14", "days").format("DD/MM/YYYY");
+    return {
+      current,
+      afterDate
+    }
+  }
+
+  protected insertWeeksInHeaders = data => data.map(header => this.displayedColumns.push(header.key));
+
+  protected setHeaders = (data) => {
     this.displayedColumns = ['LOCAL', 'ATIVIDADE', 'ENCARREGADO', 'STATUS']
-    
-    const current = event.value.toLocaleDateString();
-    const beforeDate = moment(current, "DD/MM/YYYY").subtract("7", "days").format("DD/MM/YYYY");
-    const afterDate = moment(current, "DD/MM/YYYY").add("7", "days").format("DD/MM/YYYY");
-    
-    this.weeklyScheduleService.getWeeks(beforeDate, current, afterDate);
-    this.headers = this.weeklyScheduleService.getHeaders(current);
-    this.setDisplayedColumns(this.headers);
-    
+    this.insertWeeksInHeaders(data);
+    this.displayedColumns.push('TOTAIS')
   }
-  
-  protected setDisplayedColumns = data => data.map(header => this.displayedColumns.push(header.key));
 
   ngOnDestroy() {
     this.weeklyScheduleSub.unsubscribe();
