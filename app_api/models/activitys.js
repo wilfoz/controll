@@ -10,7 +10,12 @@ const activitySchema = new mongoose.Schema({
         type: String,
         required: true,
         enum: ['CIVIL', 'MONTAGEM', 'LANÇAMENTO', 'COMISSIONAMENTO']
+    },
+    mark: {
+        type: String,
+        require: true,
+        enum: ['SIM', 'NÃO']
     }
 })
 
-mongoose.model('Activity', activitySchema);
+module.exports = mongoose.model('Activity', activitySchema);

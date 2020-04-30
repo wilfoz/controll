@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const towerSchema = new mongoose.Schema({
+    project: Number,
     name: {
         type: String,
         required: true
@@ -18,10 +19,16 @@ const towerSchema = new mongoose.Schema({
         coordinates: [Number]
     },
     forward: Number,
-    weight: Number,
     height: Number,
+    foundation_MC: String,
+    foundation_A: String,
+    foundation_B: String,
+    foundation_C: String,
+    foundation_D: String,
+
     released: { type: String, required: true,
-        enum: ['LIBERADO', 'EMBARGO', 'ARQUEOLOGIA'] }
+        enum: ['LIBERADO', 'EMBARGO', 'ARQUEOLOGIA'] },
+    
 })
 
 towerSchema.index({coords: '2dsphere'});

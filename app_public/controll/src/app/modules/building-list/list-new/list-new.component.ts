@@ -2,7 +2,7 @@ import { Component, Injector, OnInit } from '@angular/core';
 import { Validators } from '@angular/forms';
 import { BuildingList } from '../shared/models/building-list';
 import { BuildingListService } from '../building-list.service';
-import { BaseFormsResourceComponent } from '../../../shared/components/commun/base-forms-resource/base-forms-resource';
+import { BaseFormsResourceComponent } from '../../../shared/components/common/base-forms-resource/base-forms-resource';
 
 @Component({
   selector: 'app-list-form',
@@ -36,9 +36,9 @@ export class ListNewComponent extends BaseFormsResourceComponent<BuildingList> i
   }
 
   // PROTECTED METHODS
-
   protected buildResourceForm() {
     this.resourceForm = this.formBuilder.group({
+      project: [null],
       name: [null, [Validators.required, Validators.maxLength(10)]],
       type: [null, [Validators.required, Validators.maxLength(8)]],
       locality: [null, [Validators.required, Validators.maxLength(30)]],
@@ -47,28 +47,40 @@ export class ListNewComponent extends BaseFormsResourceComponent<BuildingList> i
         lng: [null, [Validators.required, Validators.pattern(this.floatPattern)]],
       }),
       forward: [null, [Validators.required, Validators.minLength(1)]],
-      weight: [null, [Validators.required, Validators.minLength(1)]],
       height: [null, [Validators.required, Validators.minLength(1)]],
       released: [null, [Validators.required]],
+      foundation_MC: null,
+      foundation_A: null,
+      foundation_B: null,
+      foundation_C: null,
+      foundation_D: null,
     });
   }
 
   protected executeListAction(listFormValue) {
 
+    const { project, name, type, locality, released, foundation_MC, foundation_A, foundation_B, foundation_C, foundation_D } = listFormValue;
+
     const lat = listFormValue.coords.lat;
     const lng = listFormValue.coords.lng;
 
     this.list = {
-      name: listFormValue.name,
-      type: listFormValue.type,
-      locality: listFormValue.locality,
+      project,
+      name,
+      type,
+      locality,
       coords: {
         coordinates: [lng, lat]
       },
       forward: +listFormValue.forward,
       weight: +listFormValue.weight,
       height: +listFormValue.height,
-      released: listFormValue.released,
+      released,
+      foundation_MC,
+      foundation_A,
+      foundation_B,
+      foundation_C,
+      foundation_D,
     };
 
     this.createResource(this.list);

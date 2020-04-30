@@ -2,9 +2,11 @@ import { Injectable, Injector } from '@angular/core';
 import { map, tap } from 'rxjs/operators';
 import { BaseResourceService } from 'src/app/shared/service/base-service-resource';
 import { Observable } from 'rxjs';
-import { Production } from '../productions/shared/production';
+
 import { BuildingListService } from '../building-list/shared/building-list.service';
-import { ProductionService } from '../productions/production.service';
+import { Production } from '../planning/productions/shared/production';
+import { ProductionService } from '../planning/productions/production.service';
+
 
 
 @Injectable({

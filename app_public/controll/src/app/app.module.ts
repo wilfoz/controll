@@ -1,4 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { LayoutModule } from '@angular/cdk/layout';
 import { NgModule, LOCALE_ID } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 
@@ -18,6 +19,7 @@ registerLocaleData(localePt);
   ],
   imports: [
     BrowserModule,
+    LayoutModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     DefaultModule,

@@ -2,7 +2,6 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import * as XLSX from 'xlsx';
 import { BuildingList } from '../../modules/building-list/shared/models/building-list';
 
-
 @Component({
   selector: 'app-filereader',
   templateUrl: './filereader.component.html',

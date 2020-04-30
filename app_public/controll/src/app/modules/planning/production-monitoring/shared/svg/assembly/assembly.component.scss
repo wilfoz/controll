@@ -1,0 +1,25 @@
+#cable-stayed,
+#self-supporting {
+    min-width: 82px;
+}
+
+.embargoed {
+    display: flex;
+    justify-content: flex-end;
+    padding: 2px;
+    width: 15px;
+    height: 15px;
+}
+
+.premontagem {
+    stroke:gray;
+    stroke-dasharray: 5.5;
+}
+
+.icamento {
+    stroke: blue;
+}
+
+.revisao {
+    stroke: black;
+}

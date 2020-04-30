@@ -15,7 +15,7 @@ export class ActivityDetailComponent implements OnInit {
 
   constructor(
       private dialogRef: MatDialogRef<ActivityDetailComponent>,
-      @Inject(MAT_DIALOG_DATA) public buildingList: Activity) { }
+      @Inject(MAT_DIALOG_DATA) public activity: Activity) { }
 
   ngOnInit() {
       this.buildForm();
@@ -23,10 +23,11 @@ export class ActivityDetailComponent implements OnInit {
 
   buildForm() {
       this.form = new FormGroup({
-          id: new FormControl(this.buildingList._id),
-          name: new FormControl(this.buildingList.name, Validators.required),
-          unity: new FormControl(this.buildingList.unity, Validators.required),
-          group: new FormControl(this.buildingList.group, Validators.required)
+          id: new FormControl(this.activity._id),
+          name: new FormControl(this.activity.name, Validators.required),
+          unity: new FormControl(this.activity.unity, Validators.required),
+          group: new FormControl(this.activity.group, Validators.required),
+          mark: new FormControl(this.activity.group, Validators.required),
       });
   }
 
@@ -43,8 +44,8 @@ export class ActivityDetailComponent implements OnInit {
   }
 
   setLeaderList = (form) => {
-    const { id: _id, name, unity, group } = form;
-    return { _id, name, unity, group };
+    const { id: _id, name, unity, group, mark } = form;
+    return { _id, name, unity, group, mark };
   }
 
 }

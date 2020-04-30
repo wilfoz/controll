@@ -1,6 +1,6 @@
 import { Component, OnInit, Injector } from '@angular/core';
 import { Activity } from '../shared/activity';
-import { BaseFormsResourceComponent } from '../../../shared/components/commun/base-forms-resource/base-forms-resource'
+import { BaseFormsResourceComponent } from '../../../shared/components/common/base-forms-resource/base-forms-resource'
 import { ActivityService } from '../activity.service';
 import { Validators } from '@angular/forms';
 
@@ -22,18 +22,14 @@ export class ActivityNewComponent extends BaseFormsResourceComponent<Activity> i
   }
 
   public submitForm(listFormValue) {
-    if (this.resourceForm.valid) {
-      this.executeListAction(listFormValue);
-    }
+    if (this.resourceForm.valid) this.executeListAction(listFormValue);
   }
 
   public hasError = (controlName: string, errorName: string) => {
     return this.resourceForm.controls[controlName].hasError(errorName);
   }
 
-  public onCancel = () => {
-    this.router.navigate(['activities-list']);
-  }
+  public onCancel = () => this.router.navigate(['activities-list']);
 
   // PROTECTED METHODS
   protected buildResourceForm() {
@@ -41,6 +37,7 @@ export class ActivityNewComponent extends BaseFormsResourceComponent<Activity> i
       name: [null, [Validators.required, Validators.minLength(3)]],
       unity: [null, [Validators.required, Validators.maxLength(5)]],
       group: [null, [Validators.required]],
+      mark: [null, [Validators.required]]
     });
   }
 

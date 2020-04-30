@@ -16,7 +16,8 @@ const productionSchema = new mongoose.Schema({
     status: {
       type: String, required: true,
         enum: ['EXECUTADO', 'PROGRAMADO', 'ANDAMENTO']
-    }
+    },
+    comment: String,
 });
 
-mongoose.model('Production', productionSchema);
+module.exports = mongoose.model('Production', productionSchema);

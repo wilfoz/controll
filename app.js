@@ -8,7 +8,6 @@ const routerProductions = require('./app_api/routes/productions');
 const routerLeader = require('./app_api/routes/leaders');
 const routerTowers = require('./app_api/routes/towers');
 const routerActivities = require('./app_api/routes/activities');
-
 const app = express();
 
 app.use(logger('dev'));

@@ -7,15 +7,17 @@
         {{ pageTitle }}
       </mat-card-title>
 
+      <br />
       <mat-divider></mat-divider>
-
+      <br />
+      
       <mat-card-content fxLayout="column" fxLayoutAlign="stretch">
 
         <form fxLayout="column" fxLayoutAlign="start stretch" [formGroup]="resourceForm" autocomplete="off" novalidate
           (ngSubmit)="submitForm(resourceForm.value)">
 
           <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between  start">
-            <mat-form-field fxFlex="90">
+            <mat-form-field fxFlex="90" appearance="outline">
               <mat-label>Etapa</mat-label>
               <select matNativeControl required formControlName="group">
                 <option *ngFor="let group of groups" [value]="group">{{ group }}</option>
@@ -24,22 +26,36 @@
           </div>
 
           <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between  start">
-            <mat-form-field fxFlex="90">
+            <mat-form-field fxFlex="90" appearance="outline">
               <input matInput type="text" placeholder="Atividade:" formControlName="name" id="name">
+              <mat-label>Atividade:</mat-label>
               <mat-error *ngIf="hasError('name', 'required')">Atividade e obrigatoria</mat-error>
               <mat-error *ngIf="hasError('name', 'maxlength')">You have more than 15 characters</mat-error>
             </mat-form-field>
           </div>
+
           <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between  start">
-            <mat-form-field fxFlex="90">
+            <mat-form-field fxFlex="90" appearance="outline">
               <input matInput type="text" placeholder="Unidade:" formControlName="unity" id="unity">
+              <mat-label>Unidade:</mat-label>
               <mat-error *ngIf="hasError('unity', 'required')">Unidade e obrigatoria</mat-error>
               <mat-error *ngIf="hasError('unity', 'maxlength')">You have more than 5 characters</mat-error>
             </mat-form-field>
           </div>
 
+          <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between  start">
+            <mat-form-field fxFlex="90" appearance="outline">
+              <select matNativeControl required formControlName="mark">
+                <option value="SIM">SIM</option>
+                <option value="NÃO">NÃO</option>
+              </select>
+              <mat-label>Marco:</mat-label>
+              <mat-error *ngIf="hasError('mark', 'required')">Marco e obrigatoria</mat-error>
+            </mat-form-field>
+          </div>
+
           <div fxFlex="100" fxLayout="row" fxLayoutAlign="center center">
-            <mat-card-actions align="center">
+            <mat-card-actions align="center" appearance="outline">
               <button mat-raised-button color="primary" [disabled]="!resourceForm.valid">Save</button>
               <button type="button" mat-raised-button color="warn" (click)="onCancel()">Cancel</button>
             </mat-card-actions>

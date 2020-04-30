@@ -10,6 +10,9 @@ const routes: Routes = [{
     path: '',
     component: DashboardComponent
   }, {
+    path: 'production', 
+    loadChildren: () => import('./modules/planning/planning.module').then(mod => mod.PlanningModule)
+  }, {
     path: 'building-list',
     loadChildren: () => import('./modules/building-list/building-list.module').then(mod => mod.BuildingListModule)
   }, {
@@ -18,15 +21,6 @@ const routes: Routes = [{
   }, {
     path: 'leaders-list',
     loadChildren: () => import('./modules/leaders/leader.module').then(mod => mod.LeaderModule)
-  }, {
-    path: 'productions-list',
-    loadChildren: () => import('./modules/productions/production.module').then(mod => mod.ProductionModule)
-  }, {
-    path: 'pds',
-    loadChildren: () => import('./modules/pds/pds.module').then(mod => mod.PdsModule)
-  },{
-    path: 'weekly',
-    loadChildren: () => import('./modules/weekly-schedule/weekly-schedule.module').then(mod => mod.WeeklyModule)
   }]
 }];
 

@@ -1,0 +1,54 @@
+<div class="example-container">
+    <div layout="row" layout-align="space-between center" flex
+        class="layout-align-space-between-center layout-row flex">
+        <h1>Diagrama de Produção:</h1>
+
+        <mat-card class="card-legends">
+            <mat-card-title>Legendas:</mat-card-title>
+            <mat-card-content>
+
+                <mat-grid-list cols="3" rowHeight="120px">
+                    <mat-grid-tile>
+                        <div class="legend-civil-content">
+                            <div class="legend-civil-header">
+                                <h3>Escala de cores - Civil</h3>
+                            </div>
+                            <div class="legend-civil-itens">
+                                <div class="legend-civil-item">Sem Atividade</div>
+                                <div class="legend-civil-item">Locação de Cavas</div>
+                                <div class="legend-civil-item">Escavação</div>
+                                <div class="legend-civil-item">Ancoragem em Rocha</div>
+                                <div class="legend-civil-item">Concretagem</div>
+                            </div>
+                        </div>
+                    </mat-grid-tile>
+                    <mat-grid-tile>2</mat-grid-tile>
+                    <mat-grid-tile>3</mat-grid-tile>
+                </mat-grid-list>
+
+            </mat-card-content>
+        </mat-card>
+        <br>
+        <mat-grid-list [cols]="cols" rowHeight="140px">
+            <mat-grid-tile *ngFor="let card of cards" [attr.rowspan]="1" [attr.colspan]="1">
+                <div class="content">
+
+                    <div [ngSwitch]="card.status" (click)="openDialog(card)">
+
+                        <div class="embargo">
+                            <span *ngIf="card.released === 'EMBARGO'">
+                                <mat-icon class="material-icons md-18" color="accent">info</mat-icon>
+                            </span>
+                        </div>
+
+                        <app-assembly *ngSwitchCase="'MONTAGEM'" [data]="card"></app-assembly>
+                        <app-civil *ngSwitchCase="'CIVIL'" [data]="card"></app-civil>
+                        <div>
+                            <span>{{ card.name }}-{{ card.type }}</span>
+                        </div>
+                    </div>
+                </div>
+            </mat-grid-tile>
+        </mat-grid-list>
+    </div>
+</div>

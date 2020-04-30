@@ -6,6 +6,7 @@ export class Activity extends BaseResourceModel {
     public name?: string,
     public unity?: string,
     public group?: string,
+    public mark?: string,
     public _id?: string,
   ) {
     super();

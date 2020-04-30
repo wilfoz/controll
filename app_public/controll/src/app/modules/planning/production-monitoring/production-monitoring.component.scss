@@ -1,0 +1,40 @@
+.legend-civil-content {
+    width: 100%;
+    height: auto;
+    border: solid 1px #000;
+    margin-top: 04px;
+    padding: 0;
+}
+
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+.content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.7em;
+    text-align: center;
+}
+
+.embargo {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    width: auto;
+    height: 18px;
+}
+
+.embargo span {
+    width: auto;
+    height: 100%;
+    margin-left: 8px;
+}
+
+.material-icons.md-18 { 
+    font-size: 18px;
+    padding: 0px;
+}

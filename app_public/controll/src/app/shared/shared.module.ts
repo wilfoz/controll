@@ -10,13 +10,18 @@ import { FooterComponent } from './components/footer/footer.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { PieComponent } from './widgets/pie/pie.component';
 import { MaterialModule } from './material.module';
+import { MenuListItemComponent } from './components/menu-list-item/menu-list-item.component';
+import { FilereaderComponent } from './filereader/filereader.component';
+
 
 @NgModule({
   declarations: [
     HeaderComponent,
     FooterComponent,
     SidebarComponent,
-    PieComponent
+    MenuListItemComponent,
+    PieComponent,
+    FilereaderComponent
   ],
   imports: [
     CommonModule,
@@ -24,7 +29,7 @@ import { MaterialModule } from './material.module';
     FlexLayoutModule,
     RouterModule,
     MaterialModule,
-    ChartsModule
+    ChartsModule,
   ],
   exports: [
     HeaderComponent,
@@ -32,7 +37,8 @@ import { MaterialModule } from './material.module';
     FooterComponent,
     SidebarComponent,
     PieComponent,
-    MaterialModule
+    MaterialModule,
+    FilereaderComponent
   ]
 })
 export class SharedModule { }

@@ -75,6 +75,7 @@ const productionCreate = (req, res) => {
           tower: results[0],
           activity: results[1],
           status: req.body.status,
+          comment: req.body.comment
         },
           (err, production) => {
             CheckError.IfError(err, res, production);
@@ -112,6 +113,7 @@ const productionUpdateOne = (req, res) => {
           production.status = req.body.status;
           production.tower = results[0];
           production.activity = results[1];
+          production.comment = req.body.comment;
           production.save((err, prod) => {
             if (err) {
               res

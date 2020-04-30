@@ -9,19 +9,17 @@ const activityReadOne = Query.ReadOne(Activity);
 const activityDeleteOne = Query.DeleteOne(Activity);
 
 const activityCreate = (req, res) => {
+    const { name, unity, group, mark } = req.body;
 
     Activity
-        .create({
-            name: req.body.name,
-            unity: req.body.unity,
-            group: req.body.group
-        },
+        .create({ name, unity, group, mark },
             (err, activity) => {
                 CheckError.IfError(err, res, activity)
             });
 };
 
 const activityUpdateOne = (req, res) => {
+    const { name, unity, group, mark } = req.body;
     if (!req.params.id) {
         return res
             .status(404)
@@ -35,9 +33,10 @@ const activityUpdateOne = (req, res) => {
 
             CheckError.IfModelNull(err, res, activity);
 
-            activity.name = req.body.name;
-            activity.unity = req.body.unity;
-            activity.group = req.body.group;
+            activity.name = name;
+            activity.unity = unity;
+            activity.group = group;
+            activity.mark = mark;
 
             activity.save((err, activity) => {
                 CheckError.IfError(err, res, activity)

@@ -2,56 +2,63 @@
   <div align="center" layout="row" layout-align="center center">
 
     <mat-card class="info-card mat-elevation-z8" flex="80" style="margin-top: 60px;width: 600px;;">
-
       <mat-card-title>
         {{ pageTitle }}
       </mat-card-title>
-
+      <br />
       <mat-divider></mat-divider>
-
+      <br />
       <mat-card-content fxLayout="column" fxLayoutAlign="stretch">
 
         <form fxLayout="column" fxLayoutAlign="start stretch" [formGroup]="resourceForm" autocomplete="off" novalidate
           (ngSubmit)="submitForm(resourceForm.value)">
 
           <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between  start">
-            <mat-form-field fxFlex="48">
-              <input matInput type="text" placeholder="Torre:" formControlName="name" id="name">
+
+            <mat-form-field appearance="outline" fxFlex="20">
+              <input matInput type="text" placeholder="Número:" formControlName="project">
+              <mat-label>Nº:</mat-label>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" fxFlex="37">
+              <input matInput type="text" placeholder="Torre:" formControlName="name">
+              <mat-label>Torre:</mat-label>
               <mat-error *ngIf="hasError('name', 'required')">Torre e obrigatorio</mat-error>
               <mat-error *ngIf="hasError('name', 'maxlength')">You have more than 10 characters</mat-error>
             </mat-form-field>
 
-            <mat-form-field fxFlex="48">
-              <input matInput type="text" placeholder="Tipo:" formControlName="type" id="type">
+            <mat-form-field appearance="outline" fxFlex="37">
+              <input matInput type="text" placeholder="Tipo:" formControlName="type">
+              <mat-label>Tipo:</mat-label>
               <mat-error *ngIf="hasError('type', 'required')">Tipo e obrigatorio</mat-error>
               <mat-error *ngIf="hasError('type', 'maxlength')">You have more than 8 characters</mat-error>
             </mat-form-field>
+
           </div>
 
           <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between start" formGroupName="coords">
-            <mat-form-field fxFlex="48">
-              <input matInput type="text" placeholder="Latitude:" formControlName="lat" id="lng">
+            <mat-form-field appearance="outline" fxFlex="48">
+              <input matInput type="text" placeholder="Latitude:" formControlName="lat">
+              <mat-label>Latitude:</mat-label>
             </mat-form-field>
-            <mat-form-field fxFlex="48">
-              <input matInput type="text" placeholder="Longitude:" formControlName="lng" id="lat">
+            <mat-form-field appearance="outline" fxFlex="48">
+              <input matInput type="text" placeholder="Longitude:" formControlName="lng">
+              <mat-label>Longitude:</mat-label>
             </mat-form-field>
           </div>
 
           <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between  start">
 
-            <mat-form-field fxFlex="30">
-              <input matInput type="text" placeholder="Vão:" formControlName="forward" id="forward">
+            <mat-form-field appearance="outline" fxFlex="48">
+              <input matInput type="text" placeholder="Vão:" formControlName="forward">
+              <mat-label>Vão:</mat-label>
               <mat-error *ngIf="hasError('forward', 'required')">Forward is required</mat-error>
               <mat-error *ngIf="hasError('forward', 'maxlength')">You have less than 1 character</mat-error>
             </mat-form-field>
-            <mat-form-field fxFlex="30">
-              <input matInput type="text" placeholder="Peso:" formControlName="weight" id="weight">
-              <mat-error *ngIf="hasError('weight', 'required')">Peso e obrigatorio</mat-error>
-              <mat-error *ngIf="hasError('weight', 'minLength')">You have less than 1 character</mat-error>
-            </mat-form-field>
 
-            <mat-form-field fxFlex="30">
-              <input matInput type="text" placeholder="Altura:" formControlName="height" id="height">
+            <mat-form-field appearance="outline" fxFlex="48">
+              <input matInput type="text" placeholder="Altura:" formControlName="height">
+              <mat-label>Altura:</mat-label>
               <mat-error *ngIf="hasError('height', 'required')">Altura e obrigatorio</mat-error>
               <mat-error *ngIf="hasError('height', 'minLength')">You have less than 1 character</mat-error>
             </mat-form-field>
@@ -59,7 +66,7 @@
           </div>
 
           <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between  start">
-            <mat-form-field fxFlex="48">
+            <mat-form-field appearance="outline" fxFlex="48">
               <mat-label>Status</mat-label>
               <select matNativeControl required formControlName="released" id="released">
                 <option value="LIBERADO">Liberado</option>
@@ -68,11 +75,49 @@
               </select>
             </mat-form-field>
 
-            <mat-form-field fxFlex="48">
+            <mat-form-field appearance="outline" fxFlex="48">
               <input matInput type="text" placeholder="Localidade:" formControlName="locality" id="locality">
+              <mat-label>Localidade:</mat-label>
               <mat-error *ngIf="hasError('locality', 'required')">Locality is required</mat-error>
               <mat-error *ngIf="hasError('locality', 'maxlength')">You have more than 60 characters</mat-error>
             </mat-form-field>
+          </div>
+
+          <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between  start">
+
+            <mat-form-field appearance="outline" fxFlex="100">
+              <input matInput type="text" placeholder="Fundação MC:" formControlName="foundation_MC">
+              <mat-label>Fundação - MC:</mat-label>
+            </mat-form-field>
+
+          </div>
+
+          <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between  start">
+
+            <mat-form-field appearance="outline" fxFlex="48">
+              <input matInput type="text" placeholder="Fundação C:" formControlName="foundation_C">
+              <mat-label>Fundação - A:</mat-label>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" fxFlex="48">
+              <input matInput type="text" placeholder="Fundação D:" formControlName="foundation_C">
+              <mat-label>Fundação - B:</mat-label>
+            </mat-form-field>
+
+          </div>
+
+          <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between  start">
+
+            <mat-form-field appearance="outline" fxFlex="48">
+              <input matInput type="text" placeholder="Fundação C:" formControlName="foundation_C">
+              <mat-label>Fundação - C:</mat-label>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" fxFlex="48">
+              <input matInput type="text" placeholder="Fundação D:" formControlName="foundation_C">
+              <mat-label>Fundação - D:</mat-label>
+            </mat-form-field>
+
           </div>
 
           <div fxFlex="100" fxLayout="row" fxLayoutAlign="center center">

@@ -1,0 +1,36 @@
+table {
+    width: 100%;
+  }
+
+  .table-header-one {
+    height: 70px;
+  }
+
+  .table-header-one th {
+    border: 0.5px;
+    border: solid 1px rgba(0, 0, 0, 0.250);
+    height: 25%;
+    padding: 8px;
+  }
+
+  .header-logo {
+    align-items: center;
+    text-align: center;
+    font-weight: bold;
+  }
+
+  #head-title {
+    text-align: center;
+    color: honeydew;
+    background-color:slategrey;
+    font-size: 20px;
+  }
+  
+  .example-first-header-row th {
+    border-color: darken($color: #000000, $amount: 0);
+  }
+  
+  .example-second-header-row {
+    border-color: darken($color: #000000, $amount: 0);
+  }
+  

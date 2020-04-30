@@ -1,6 +1,6 @@
 import { Component, OnInit, Injector } from '@angular/core';
 import { Leader } from '../shared/leader';
-import { BaseFormsResourceComponent } from '../../../shared/components/commun/base-forms-resource/base-forms-resource';
+import { BaseFormsResourceComponent } from '../../../shared/components/common/base-forms-resource/base-forms-resource';
 import { LeadersService } from '../leaders.service';
 import { Validators } from '@angular/forms';
 

@@ -8,8 +8,6 @@ const productionsFind = (req, res) => {
     let start = moment(req.query.start, 'DD/MM/YYYY', true).format();
     let end = moment(req.query.end, 'DD/MM/YYYY', true).add( 3, 'hours' ).format();
 
-    console.log(start, end);
-
     Prod
         .find({
             date: { $gte: start, $lte: end },

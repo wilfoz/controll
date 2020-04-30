@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
-const activitySchema = new mongoose.Schema({
+const leaderSchema = new mongoose.Schema({
     name: String,
     office: String,
 })
 
-mongoose.model('Leader', activitySchema);
+module.exports = mongoose.model('Leader', leaderSchema);

@@ -1,43 +1,63 @@
 <form [formGroup]="form">
 
   <mat-form-field class="half-width">
-    <input matInput type="text" placeholder="Torre:" formControlName="name" id="name">
+    <input matInput type="text" placeholder="Número:" formControlName="project">
   </mat-form-field>
 
   <mat-form-field class="half-width">
-    <input matInput type="text" placeholder="Tipo:" formControlName="type" id="type">
+    <input matInput type="text" placeholder="Torre:" formControlName="name">
+  </mat-form-field>
+
+  <mat-form-field class="half-width">
+    <input matInput type="text" placeholder="Tipo:" formControlName="type">
   </mat-form-field>
 
   <div formGroupName="coords">
 
     <mat-form-field class="half-width">
-      <input matInput type="text" placeholder="Latitude:" formControlName="lat" id="lng">
+      <input matInput type="text" placeholder="Latitude:" formControlName="lat">
     </mat-form-field>
     <mat-form-field class="half-width">
-      <input matInput type="text" placeholder="Longitude:" formControlName="lng" id="lat">
+      <input matInput type="text" placeholder="Longitude:" formControlName="lng">
     </mat-form-field>
 
   </div>
 
   <mat-form-field class="small-width">
-    <input matInput type="text" placeholder="Vão:" formControlName="forward" id="forward">
+    <input matInput type="text" placeholder="Vão:" formControlName="forward">
   </mat-form-field>
 
   <mat-form-field class="small-width">
-    <input matInput type="text" placeholder="Peso:" formControlName="weight" id="weight">
-  </mat-form-field>
-
-  <mat-form-field class="small-width">
-    <input matInput type="text" placeholder="Altura:" formControlName="height" id="height">
+    <input matInput type="text" placeholder="Altura:" formControlName="height">
   </mat-form-field>
 
   <mat-form-field class="small-width">
     <mat-label>Status</mat-label>
-    <select matNativeControl required formControlName="released" id="released">
+    <select matNativeControl required formControlName="released">
       <option value="LIBERADO">Liberado</option>
       <option value="EMBARGO">Embargo</option>
       <option value="ARQUEOLOGIA">Arqueologia</option>
     </select>
+  </mat-form-field>
+
+  <mat-form-field class="small-width">
+    <input matInput type="text" placeholder="Fundação - MC:" formControlName="foundation_MC">
+  </mat-form-field>
+
+  <mat-form-field class="small-width">
+    <input matInput type="text" placeholder="Fundação - A:" formControlName="foundation_A">
+  </mat-form-field>
+
+  <mat-form-field class="small-width">
+    <input matInput type="text" placeholder="Fundação - B:" formControlName="foundation_B">
+  </mat-form-field>
+
+  <mat-form-field class="small-width">
+    <input matInput type="text" placeholder="Fundação - C:" formControlName="foundation_C">
+  </mat-form-field>
+
+  <mat-form-field class="small-width">
+    <input matInput type="text" placeholder="Fundação - D:" formControlName="foundation_D">
   </mat-form-field>
 
 </form>
