@@ -11,7 +11,7 @@
     "debug": "~2.6.9",
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
-    "jspdf": "^1.5.3",
+    "jspdf": "^2.3.1",
     "jspdf-autotable": "^3.2.11",
     "moment": "^2.24.0",
     "mongoose": "^5.7.8",
