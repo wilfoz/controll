@@ -13,7 +13,7 @@
     "http-errors": "~1.6.3",
     "jspdf": "^1.5.3",
     "jspdf-autotable": "^3.2.11",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "mongoose": "^5.7.8",
     "morgan": "~1.9.1",
     "nodemon": "^1.19.4",
